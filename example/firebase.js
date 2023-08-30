@@ -8,12 +8,11 @@ const html=`<html break-after="always" style="font: Verdana;"><head></head><body
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBFx6Unb0l216gQ2NUkmNNqBh5bjJimWxQ",
-  authDomain: "html-to-pdf-base64-developo.firebaseapp.com",
-  projectId: "html-to-pdf-base64-developo",
-  storageBucket: "html-to-pdf-base64-developo.appspot.com",
-  messagingSenderId: "909244211020",
-  appId: "1:909244211020:web:f425e623ae9176f4adb9e9"
+  apiKey: "YOUR KEY",
+  authDomain: "YOUR AUTH",
+  storageBucket: "YOUR BUCKET",
+  messagingSenderId: "YOUR MESSAGE ID",
+  appId: "YOUR APP ID"
 };
 
 // Initialize Firebase
