@@ -17,7 +17,6 @@ const puppeteer = require('puppeteer');
 // https://firebase.google.com/docs/functions/get-started
 
 exports.htmlBase64ToPdfBase64 = onRequest(async(request, response) => {
-
   var browser = await puppeteer.launch({ headless:"new",args: ['--no-sandbox', '--disable-setuid-sandbox'] });
 
   if(request.method !== "POST"){
