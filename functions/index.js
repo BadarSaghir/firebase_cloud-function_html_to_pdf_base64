@@ -7,7 +7,7 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-const { onRequest } = require("firebase-functions/v2/https");
+const { onRequest,onCall } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const puppeteer = require("puppeteer");
 const functions = require("firebase-functions");
@@ -73,4 +73,47 @@ exports.htmlBase64ToPdfBase64 = onRequest(async (request, response) => {
       status: e.toString(),
     };
   }
+});
+
+
+exports.htmlBase64ToPdfBase64Callable = onCall(async(request) => {
+  let base64_html = "";
+ if (request?.data.base64_html) {
+    base64_html = request.data.base64_html;
+  } else {
+   
+    return { status: "Please send a POST request" };
+  }
+
+  const html = atob(base64_html);
+
+  try {  
+    var browser = await puppeteer.launch({
+    headless: "new",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+    const page = await browser.newPage();
+    await page.setContent(html);
+
+    const buffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      margin: {
+        left: "0px",
+        top: "0px",
+        right: "0px",
+        bottom: "0px",
+      },
+    });
+
+  
+    await browser.close();
+    return { type: "pdf", encoding: "base64", file: buffer.toString("base64") };
+  } catch (e) {
+    
+    return {
+      status: e.toString(),
+    };
+  }
+  // ...
 });
