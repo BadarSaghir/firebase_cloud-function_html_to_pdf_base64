@@ -26,7 +26,7 @@ htmlBase64ToPdfBase64({ base64_html: base64_html })
     // Read result of the Cloud Function.
     /** @type {any} */
     const data = result.data;
-    const sanitizedMessage = data.type;
+    const sanitizedMessage = data;
     console.log(sanitizedMessage)
   })
   .catch((error) => {
