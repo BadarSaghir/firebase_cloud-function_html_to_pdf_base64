@@ -7,62 +7,70 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-
-const {onRequest} = require("firebase-functions/v2/https");
+const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
-const puppeteer = require('puppeteer');
+const puppeteer = require("puppeteer");
+const functions = require("firebase-functions");
 
+const { setGlobalOptions } = require("firebase-functions/v2");
+setGlobalOptions({ maxInstances: 10 });
 // const {  jsPDF } = require("jspdf");
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
-exports.htmlBase64ToPdfBase64 = onRequest(async(request, response) => {
-  var browser = await puppeteer.launch({ headless:"new",args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+exports.htmlBase64ToPdfBase64 = onRequest(async (request, response) => {
 
-  if(request.method !== "POST"){
-    response.status(400).json({status:'Please send a POST request'});
-    return;
+
+  if (request.method !== "POST") {
+    response.status(400).json({ status: "Please send a POST request" });
+    return { status: "Please send a POST request" };
   }
-  if(!request.body.base64_html){
-    response.status(400).json({status:'Missing a require argument base64_html'});
-    return;
+  let base64_html = "";
+  if (request?.body.base64_html) {
+    base64_html = request.body.base64_html;
+  } else if (request?.data.base64_html) {
+    base64_html = request.data.base64_html;
+  } else {
+    response
+      .status(400)
+      .json({ status: "Missing a require argument base64_html" });
+    return { status: "Please send a POST request" };
   }
-  const html=atob(request.body.base64_html);
- 
 
+  const html = atob(base64_html);
 
-  try {
-
+  try {  
+    var browser = await puppeteer.launch({
+    headless: "new",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
     const page = await browser.newPage();
-    await page.setContent(html)
-
+    await page.setContent(html);
 
     const buffer = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-        margin: {
-            left: '0px',
-            top: '0px',
-            right: '0px',
-            bottom: '0px'
-        }
-    })
+      format: "A4",
+      printBackground: true,
+      margin: {
+        left: "0px",
+        top: "0px",
+        right: "0px",
+        bottom: "0px",
+      },
+    });
 
-
-
-
-    response.json({type:"pdf",encoding:"base64",
-    file:buffer.toString("base64")});
-    browser.close()
-return
-
-
-} catch (e) {
-    response.status(500).json({status:e.toString()});
-    browser.close()
-    return
-}
-
-
-
+    response
+      .status(200)
+      .json({
+        type: "pdf",
+        encoding: "base64",
+        file: buffer.toString("base64"),
+      });
+    await browser.close();
+    return { type: "pdf", encoding: "base64", file: buffer.toString("base64") };
+  } catch (e) {
+    response.status(500).json({ status: e.toString() });
+    return {
+      status: e.toString(),
+    };
+  }
 });
