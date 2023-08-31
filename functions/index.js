@@ -76,6 +76,7 @@ setGlobalOptions({ maxInstances: 10 });
 // });
 
 exports.htmlBase64ToPdfBase64Callable = onCall(async(request) => {
+  
   let base64_html = "";
  if (request?.data.base64_html) {
     base64_html = request.data.base64_html;
