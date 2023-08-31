@@ -8,11 +8,12 @@ const html=`<html break-after="always" style="font: Verdana;"><head></head><body
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR KEY",
-  authDomain: "YOUR AUTH",
-  storageBucket: "YOUR BUCKET",
-  messagingSenderId: "YOUR MESSAGE ID",
-  appId: "YOUR APP ID"
+  apiKey: "AIzaSyBFx6Unb0l216gQ2NUkmNNqBh5bjJimWxQ",
+  authDomain: "html-to-pdf-base64-developo.firebaseapp.com",
+  projectId: "html-to-pdf-base64-developo",
+  storageBucket: "html-to-pdf-base64-developo.appspot.com",
+  messagingSenderId: "909244211020",
+  appId: "1:909244211020:web:f425e623ae9176f4adb9e9"
 };
 
 // Initialize Firebase
@@ -20,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 const functions = getFunctions(app);
 const htmlBase64ToPdfBase64 = httpsCallable(functions, 'htmlBase64ToPdfBase64Callable');
 const base64_html=btoa(html)
-htmlBase64ToPdfBase64({ base64_html: base64_html })
+htmlBase64ToPdfBase64({html: base64_html })
   .then((result) => {
     // Read result of the Cloud Function.
     /** @type {any} */

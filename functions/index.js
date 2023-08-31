@@ -75,15 +75,17 @@ setGlobalOptions({ maxInstances: 10 });
 //   }
 // });
 
-exports.htmlBase64ToPdfBase64Callable = onCall(async(request) => {
-  
+/**
+ * base64 encoded html
+ */
+exports.ReturnPdfFromHtml = onCall(async(request) => {
+  if (!request.auth) return({status:false, code:401, message:"Not signed in" })
   let base64_html = "";
- if (request?.data.base64_html) {
-    base64_html = request.data.base64_html;
+ if (request?.data.html) {
+    base64_html = request.data.html;
   } else {
    
-    return { status: "Please send a POST request" };
-  }
+    return({status:false, code:401, message:"Please send html" })  }
 
   const html = Buffer.from(base64_html,"base64").toString();
 
@@ -108,12 +110,12 @@ exports.htmlBase64ToPdfBase64Callable = onCall(async(request) => {
 
   
     await browser.close();
-    return { type: "pdf", encoding: "base64", file: buffer.toString("base64") };
+    return({status:true, code:200, message: buffer.toString("base64") })  
+
   } catch (e) {
     
-    return {
-      status: e.toString(),
-    };
+    return({status:true, code:201, message: e.toString() })  
+
   }
   // ...
 });
