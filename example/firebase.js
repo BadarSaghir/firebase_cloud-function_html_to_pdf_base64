@@ -19,9 +19,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const functions = getFunctions(app);
-const htmlBase64ToPdfBase64 = httpsCallable(functions, 'htmlBase64ToPdfBase64Callable');
+const ReturnPdfFromHtml = httpsCallable(functions, 'ReturnPdfFromHtml');
 const base64_html=btoa(html)
-htmlBase64ToPdfBase64({html: base64_html })
+ReturnPdfFromHtml({html: base64_html })
   .then((result) => {
     // Read result of the Cloud Function.
     /** @type {any} */
