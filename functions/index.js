@@ -13,8 +13,8 @@ const puppeteer = require("puppeteer");
 const functions = require("firebase-functions");
 
 const { setGlobalOptions } = require("firebase-functions/v2");
-setGlobalOptions({ maxInstances: 10 });
-// const {  jsPDF } = require("jspdf");
+setGlobalOptions({ maxInstances: 10,memory:"4GiB"});
+// const {  jsPDF } = require("jspdf")
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 
@@ -87,7 +87,7 @@ exports.ReturnPdfFromHtml = onCall(async(request) => {
    
     return({status:false, code:401, message:"Please send html" })  }
 
-  const html = Buffer.from(base64_html,"base64").toString();
+  const html = Buffer.from(base64_html,"base64").toString();// base64_html
 
   try {  
     var browser = await puppeteer.launch({
